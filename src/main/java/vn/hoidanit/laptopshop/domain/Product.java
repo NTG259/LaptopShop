@@ -22,7 +22,6 @@ public class Product {
     private String factory;
     private String target;
 
-    
     public Long getId() {
         return id;
     }
