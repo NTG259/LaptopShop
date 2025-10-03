@@ -13,6 +13,17 @@
                 <title>Dashboard - Hỏi Dân IT</title>
                 <link href="/css/styles.css" rel="stylesheet" />
                 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+                <script>
+                    $(document).ready(() => {
+                        const avatarFile = $("#avatarFile");
+                        avatarFile.change(function (e) {
+                            const imgURL = URL.createObjectURL(e.target.files[0]);
+                            $("#avatarPreview").attr("src", imgURL);
+                            $("#avatarPreview").css({ "display": "block" });
+                        });
+                    });
+                </script>
             </head>
 
             <body class="sb-nav-fixed">
@@ -36,7 +47,7 @@
                                                 <h3>Update user</h3>
                                                 <hr />
                                                 <form:form method="post" action="/admin/user/update"
-                                                    modelAttribute="user">
+                                                    modelAttribute="user" enctype="multipart/form-data">
 
                                                     <div class="mb-3" style="display: none;">
                                                         <label class="form-label">ID:</label>
@@ -61,6 +72,23 @@
                                                         <label class="form-label">Address:</label>
                                                         <form:input type="text" class="form-control" path="address" />
                                                     </div>
+                                                    <div class="mb-3 col-md-6 col-12">
+                                                        <label class="form-label">Select role</label>
+                                                        <form:select class="form-select" path="role.name">
+                                                            <form:option value="">-----</form:option>
+                                                            <form:option value="ADMIN">ADMIN</form:option>
+                                                            <form:option value="USER">USER</form:option>
+                                                        </form:select>
+                                                    </div>
+                                                    <div class="mb-3 col-md-6 col-12">
+                                                        <label for="formFile" class="form-label">Upload avatar</label>
+                                                        <input class="form-control" type="file" id="avatarFile"
+                                                            accept=".png, .jpg, .jpeg" name="updateAvatarFile" />
+                                                    </div>
+                                                    <div class="mb-3 col-12">
+                                                        <img style="max-height: 250px; display:none;"
+                                                            alt="avatar preview" id="avatarPreview">
+                                                    </div>
                                                     <button class="btn btn-warning">Update</button>
                                                 </form:form>
                                             </div>
@@ -75,10 +103,10 @@
                 </div>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
                     crossorigin="anonymous"></script>
-                <script src="js/scripts.js"></script>
+                <script src="/js/scripts.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
                     crossorigin="anonymous"></script>
-                <script src="js/datatables-simple-demo.js"></script>
+                <script src="/js/datatables-simple-demo.js"></script>
             </body>
 
             </html>

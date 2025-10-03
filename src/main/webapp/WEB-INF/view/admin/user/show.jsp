@@ -39,6 +39,7 @@
                                                 <th scope="col">ID</th>
                                                 <th scope="col">Name</th>
                                                 <th scope="col">Email</th>
+                                                <th scope="col">Role</th>
                                                 <th scope="col">Action</th>
                                             </tr>
                                         </thead>
@@ -48,6 +49,7 @@
                                                     <td>${user.id}</td>
                                                     <td>${user.fullName}</td>
                                                     <td>${user.email}</td>
+                                                    <td>${user.role}</td>
                                                     <td>
                                                         <a href="/admin/user/${user.id}"
                                                             class="btn btn-success">View</a>
@@ -68,10 +70,10 @@
                 </div>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
                     crossorigin="anonymous"></script>
-                <script src="js/scripts.js"></script>
+                <script src="/js/scripts.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
                     crossorigin="anonymous"></script>
-                <script src="js/datatables-simple-demo.js"></script>
+                <script src="/js/datatables-simple-demo.js"></script>
             </body>
 
             </html>

@@ -17,26 +17,65 @@
         <body class="sb-nav-fixed">
             <jsp:include page="../layout/header.jsp" />
             <div id="layoutSidenav">
-                <jsp:include page="../layout/sidebar.jsp"/>
+                <jsp:include page="../layout/sidebar.jsp" />
                 <div id="layoutSidenav_content">
                     <main>
                         <div class="container-fluid px-4">
-                            <h1 class="mt-4">Dashboard</h1>
+                            <h1 class="mt-4">Manage products</h1>
+                            
                             <ol class="breadcrumb mb-4">
-                                <li class="breadcrumb-item active">Dashboard</li>
+                                <a href="/admin">Dashboard</a>
+                                <li class="breadcrumb-item active">&nbsp;/&nbsp;Products</li>
                             </ol>
-                            <div>product</div>
+                            <!-- <div>product</div> -->
+                            <div class="container mt-5">
+                                <div class="d-flex justify-content-between">
+                                    <h3>Table Products</h3>
+                                    <a class="btn btn-success" href="product/create">Create new product</a>
+                                </div>
+
+                                <hr>
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col">factory</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="product" items="${products}">
+                                            <tr>
+                                                <td>${product.id}</td>
+                                                <td>${product.name}</td>
+                                                <td>${product.price} đ</td>
+                                                <td>${product.factory}</td>
+                                                <td>
+                                                    <a href="/admin/product/${product.id}" 
+                                                        class="btn btn-success">View</a>
+                                                    <a href="/admin/product/update/${product.id}"
+                                                        class="btn btn-warning">Update</a>
+                                                    <a href="/admin/product/delete/${product.id}"
+                                                        class="btn btn-danger">Delete</a>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </main>
-                    <jsp:include page="../layout/footer.jsp"/>
+                    <jsp:include page="../layout/footer.jsp" />
                 </div>
             </div>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
                 crossorigin="anonymous"></script>
-            <script src="js/scripts.js"></script>
+            <script src="/js/scripts.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
                 crossorigin="anonymous"></script>
-            <script src="js/datatables-simple-demo.js"></script>
+            <script src="/js/datatables-simple-demo.js"></script>
         </body>
 
         </html>

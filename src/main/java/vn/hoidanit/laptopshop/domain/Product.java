@@ -5,6 +5,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name="products")
@@ -12,14 +15,29 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
+    @Size(min=2, message="Product's name is not less than two character")
     private String name;
+
+    @NotNull(message="Price can not be null")
+    @DecimalMin(value="0", inclusive=false, message="Price must greater than 0")
     private double price;
+
     private String image;
     private String detailDesc;
     private String shortDesc;
+    
+    @NotNull(message="Quantity can not be null")
     private long quantity;
+
+    @NotNull(message="Sold price can not be null")
     private long sold;
+
+    @NotNull(message="Factory can not be null")
     private String factory;
+
+    @NotNull(message="Target can not be null")
     private String target;
 
     public Long getId() {

@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
             <!DOCTYPE html>
             <html lang="en">
 
@@ -43,15 +44,21 @@
                                             <h3>Create a user</h3>
                                             <hr />
                                             <form:form method="post" action="/admin/user/create"
-                                                modelAttribute="newUser" class="row">
+                                                modelAttribute="newUser" class="row" enctype="multipart/form-data">
+                                                <c:set var="errorPassword">
+                                                    <form:errors path="password" />
+                                                </c:set>
                                                 <div class="mb-3 col-md-6 col-12">
                                                     <label class="form-label">Email:</label>
-                                                    <form:input type="text" class="form-control" path="email" />
+                                                    <form:input type="email" class="form-control is-invalid"
+                                                        path="email" />
+                                                    <form:errors path="email" cssClass="invalid-feedback" />
                                                 </div>
 
                                                 <div class="mb-3 col-md-6 col-12">
                                                     <label class="form-label">Password:</label>
-                                                    <form:input type="password" class="form-control" path="password" />
+                                                    <form:input type="password" class="form-control ${not empty errorPassword ? 'is-invalid' : ''}"
+                                                        path="password" /> ${errorPassword}
                                                 </div>
 
                                                 <div class="mb-3 col-md-6 col-12">
@@ -60,8 +67,13 @@
                                                 </div>
 
                                                 <div class="mb-3 col-md-6 col-12">
+                                                    <c:set var="errorFullName">
+                                                        <form:errors path="fullName" cssClass="invalid-feedback" />
+                                                    </c:set>
                                                     <label class="form-label">Full Name:</label>
-                                                    <form:input type="text" class="form-control" path="fullName" />
+                                                    <form:input type="text"
+                                                        class="form-control ${not empty errorFullName ? 'is-invalid' : ''}"
+                                                        path="fullName" /> ${errorFullName}
                                                 </div>
 
                                                 <div class="mb-3">
@@ -71,17 +83,17 @@
 
                                                 <div class="mb-3 col-md-6 col-12">
                                                     <label class="form-label">Select role</label>
-                                                    <select class="form-select" aria-label="Default select example">
-                                                        <option selected>Select role</option>
-                                                        <option value="1">ADMIN</option>
-                                                        <option value="2">USER</option>
-                                                    </select>
+                                                    <form:select class="form-select" path="role.name">
+                                                        <form:option value="">-----</form:option>
+                                                        <form:option value="ADMIN">ADMIN</form:option>
+                                                        <form:option value="USER">USER</form:option>
+                                                    </form:select>
                                                 </div>
 
                                                 <div class="mb-3 col-md-6 col-12">
                                                     <label for="formFile" class="form-label">Upload avatar</label>
                                                     <input class="form-control" type="file" id="avatarFile"
-                                                        accept=".png, .jpg, .jpeg">
+                                                        accept=".png, .jpg, .jpeg" name="hoidanitFile" />
                                                 </div>
                                                 <div class="mb-3 col-12">
                                                     <img style="max-height: 250px; display:none;" alt="avatar preview"
@@ -100,10 +112,10 @@
                 </div>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
                     crossorigin="anonymous"></script>
-                <script src="js/scripts.js"></script>
+                <script src="/js/scripts.js"></script>
                 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
                     crossorigin="anonymous"></script>
-                <script src="js/datatables-simple-demo.js"></script>
+                <script src="/js/datatables-simple-demo.js"></script>
             </body>
 
             </html>
