@@ -47,7 +47,6 @@ public class UserController {
         System.out.println(">>> check id :" + id);
         User user = this.userService.getUserById(id);
         model.addAttribute("user", user);
-        model.addAttribute("avatar", this.upLoadService.handleGetSourceImg(user.getAvatar()));
         return "admin/user/detail";
     }
 
@@ -120,4 +119,5 @@ public class UserController {
         return "redirect:/admin/user";
     }
 
+    
 }

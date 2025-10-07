@@ -44,7 +44,7 @@
                                             <li class="list-group-item">Full name: ${user.fullName}</li>
                                             <li class="list-group-item">Address: ${user.address}</li>
                                             <li class="list-group-item">Phone Number: ${user.phone}</li>
-                                            <img src="${avatar}" width="160" height="160" class="img-thumbnail"></img>
+                                            <img src="/images/avatar/${user.avatar}" width="160" height="160" class="img-thumbnail"></img>
                                         </ul>
                                     </div>
                                     <hr />

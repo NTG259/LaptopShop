@@ -86,7 +86,18 @@ public class ProductController {
     
 
     @PostMapping("/admin/product/update")
-    public String postUpdateProduct(Model model,@ModelAttribute("product") Product product, @RequestParam("updateImgFile") MultipartFile file) {
+    public String postUpdateProduct(
+        Model model,
+        @ModelAttribute("product") @Valid Product product, 
+        BindingResult newProductBindingResult,
+        @RequestParam("updateImgFile") MultipartFile file) {
+        // --Validate data
+
+
+        if (newProductBindingResult.hasErrors()) {
+            return "admin/product/update";
+        }
+        
         Product currentProduct = this.productService.getProductById(product.getId());
         if (currentProduct != null) {
             currentProduct.setName(product.getName());
@@ -96,7 +107,10 @@ public class ProductController {
             currentProduct.setFactory(product.getFactory());
             currentProduct.setSold(product.getSold());
             currentProduct.setTarget(product.getTarget());
-            currentProduct.setImage(product.getImage());
+            if (!file .isEmpty()){
+                String img = this.upLoadService.handleSaveUploadFile(file, "product");
+                currentProduct.setImage(img);
+            }
             this.productService.handleSaveProduct(currentProduct);
         }
         return "redirect:/admin/product";
