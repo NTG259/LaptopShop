@@ -109,7 +109,7 @@ public class ItemController {
         HttpSession session = request.getSession(false);
         User currentUser = new User();
         currentUser.setId((Long)session.getAttribute("id"));
-
+        // double a = (double)session.getAttribute("totalPrice");
         this.productService.handlePlaceOrder(currentUser, session, receiverName, receiverAddress, receiverPhone);
         return "client/cart/thanks";
     }

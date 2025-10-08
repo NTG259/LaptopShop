@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpSession;
+import jakarta.transaction.Transactional;
 import vn.hoidanit.laptopshop.domain.Cart;
 import vn.hoidanit.laptopshop.domain.CartDetail;
 import vn.hoidanit.laptopshop.domain.Order;
@@ -58,6 +59,10 @@ public class ProductService {
 
     public void deleteProductById(long id) {
         this.productRepository.deleteById(id);
+    }
+
+    public Long countProduct() {
+        return this.productRepository.count();
     }
 
     public Cart findByUser(User user) {
@@ -144,8 +149,10 @@ public class ProductService {
         order.setReceiverName(receiverName);
         order.setReceiverAddress(receiverAddress);
         order.setReceiverPhone(receiverPhone);
+        order.setStatus("PENDING");
         order = this.orderRepository.save(order);
-
+        
+        Double totalPrice = 0.0;
         Cart cart = this.cartRepository.findByUser(user);
         if (cart != null) {
             List<CartDetail> cartDetails = cart.getCartDetails();
@@ -159,6 +166,7 @@ public class ProductService {
                     orderDetail.setPrice(cd.getPrice());
                     orderDetail.setQuantity(cd.getQuantity());
                     this.orderDetailRepository.save(orderDetail);
+                    totalPrice += cd.getPrice() * cd.getQuantity();
                 }
                 //step 2 : Xóa sản phẩm trong cartDetail và cart
                 for (CartDetail cd : cartDetails) {
@@ -167,10 +175,34 @@ public class ProductService {
 
                 this.cartRepository.deleteById(cart.getId());
 
-                //step 3 : update session
+                //step 3 : update session và lưu order
                 session.setAttribute("sum", 0);
+                order.setTotalPrice(totalPrice);
+                order = this.orderRepository.save(order);
+                
             }
         }
 
+    }
+
+    public List<Order> getAllOrders () {
+        return this.orderRepository.findAll();
+    }
+    public Order getOrderById(Long id) {
+        return this.orderRepository.findById(id).get();
+    }
+
+    public List<OrderDetail> getOrderDetailByOrder(Order order) {
+        return this.orderDetailRepository.findByOrder(order);
+    }
+
+    public void saveOrder(Order order) {
+        this.orderRepository.save(order);
+    }
+
+    @Transactional
+    public void deleteOrder(Order order) {
+        this.orderDetailRepository.deleteByOrder(order);
+        this.orderRepository.deleteById(order.getId());
     }
 }

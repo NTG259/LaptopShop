@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+        
             <!DOCTYPE html>
             <html lang="en">
 
@@ -55,7 +56,7 @@
                                                     </div>
                                                     <div class="mb-3">
                                                         <label class="form-label">Email:</label>
-                                                        <form:input type="text" class="form-control" path="email" />
+                                                        <form:input type="text" class="form-control" path="email" disabled="true"/>
                                                     </div>
 
                                                     <div class="mb-3">

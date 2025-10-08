@@ -67,7 +67,7 @@
                                                         <a href="/admin/product/delete/${product.id}"
                                                             class="btn btn-danger">Delete</a>
                                                     </td>
-                                                <P/tr>
+                                                </tr>
                                             </c:forEach>
                                         </tbody>
 
