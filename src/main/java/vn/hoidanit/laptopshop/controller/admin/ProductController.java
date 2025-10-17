@@ -2,6 +2,9 @@ package vn.hoidanit.laptopshop.controller.admin;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,13 +21,9 @@ import vn.hoidanit.laptopshop.domain.Product;
 import vn.hoidanit.laptopshop.service.ProductService;
 import vn.hoidanit.laptopshop.service.UpLoadService;
 
-
-
-
-
-
 @Controller
 public class ProductController {
+
     private final UpLoadService upLoadService;
     private final ProductService productService;
 
@@ -34,26 +33,32 @@ public class ProductController {
     }
 
     @GetMapping("/admin/product")
-    public String getProduct(Model model) {
-        List<Product> products = this.productService.getAllProducts();
+    public String getProduct(
+            Model model,
+            @RequestParam("page") int page) {
+        Pageable pageable = PageRequest.of(page - 1, 2);
+        Page<Product> prs = this.productService.getAllProducts(pageable);
+        List<Product> products = prs.getContent();
         model.addAttribute("products", products);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", prs.getTotalPages());
+
         return "admin/product/show";
     }
-    
+
     @GetMapping("/admin/product/create")
     public String getCreateProduct(Model model) {
         model.addAttribute("newProduct", new Product());
         return "admin/product/create";
     }
 
-
     @PostMapping("/admin/product/create")
     public String createProduct(
-        Model model, 
-        @ModelAttribute("newProduct") @Valid Product newProduct, 
-        BindingResult newProductBindingResult, 
-        @RequestParam("productImgFile") MultipartFile file ) {
-        
+            Model model,
+            @ModelAttribute("newProduct") @Valid Product newProduct,
+            BindingResult newProductBindingResult,
+            @RequestParam("productImgFile") MultipartFile file) {
+
         List<FieldError> errors = newProductBindingResult.getFieldErrors();
         for (FieldError error : errors) {
             System.out.println(">>>>>" + error.getField() + " - " + error.getDefaultMessage());
@@ -68,14 +73,13 @@ public class ProductController {
         this.productService.handleSaveProduct(newProduct);
         return "redirect:/admin/product";
     }
-    
+
     @GetMapping("/admin/product/{id}")
     public String getDetailProduct(Model model, @PathVariable("id") Long id) {
         Product product = this.productService.getProductById(id);
         model.addAttribute("detailProduct", product);
         return "admin/product/detail";
     }
-    
 
     @GetMapping("/admin/product/update/{id}")
     public String getUpdateProductPage(Model model, @PathVariable("id") Long id) {
@@ -83,21 +87,19 @@ public class ProductController {
         model.addAttribute("product", updateProduct);
         return "admin/product/update";
     }
-    
 
     @PostMapping("/admin/product/update")
     public String postUpdateProduct(
-        Model model,
-        @ModelAttribute("product") @Valid Product product, 
-        BindingResult newProductBindingResult,
-        @RequestParam("updateImgFile") MultipartFile file) {
+            Model model,
+            @ModelAttribute("product") @Valid Product product,
+            BindingResult newProductBindingResult,
+            @RequestParam("updateImgFile") MultipartFile file) {
         // --Validate data
-
 
         if (newProductBindingResult.hasErrors()) {
             return "admin/product/update";
         }
-        
+
         Product currentProduct = this.productService.getProductById(product.getId());
         if (currentProduct != null) {
             currentProduct.setName(product.getName());
@@ -107,7 +109,7 @@ public class ProductController {
             currentProduct.setFactory(product.getFactory());
             currentProduct.setSold(product.getSold());
             currentProduct.setTarget(product.getTarget());
-            if (!file .isEmpty()){
+            if (!file.isEmpty()) {
                 String img = this.upLoadService.handleSaveUploadFile(file, "product");
                 currentProduct.setImage(img);
             }
@@ -128,6 +130,5 @@ public class ProductController {
         this.productService.deleteProductById(product.getId());
         return "redirect:/admin/product";
     }
-    
-    
+
 }
